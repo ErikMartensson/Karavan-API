@@ -41,7 +41,7 @@ foreach($html->find('div.entry-content h1') as $h1) {
 $strJsonString = json_encode($arrReturn);
 
 header('Access-Control-Allow-Origin: *');
-header('Content-Length: ' . strlen($strJsonString));
+header('Content-Length: ' . mb_strlen($strJsonString));
 header('Content-Type: application/json');
 
 echo $strJsonString;
