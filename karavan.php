@@ -25,10 +25,25 @@ $arrEnglishWeekDays = array(
 );
 
 foreach($html->find('div.entry-content h1') as $h1) {
-	if ($h1->next_sibling()->tag === 'ul') {
+	if ($h1->next_sibling()->tag === 'ul' || $h1->next_sibling()->next_sibling()->tag === 'ul') {
 		$arrDay = array();
 		$arrDay['day'] = str_ireplace($arrSwedishWeekDays, $arrEnglishWeekDays, str_replace('.', '', $h1->plaintext));
-		$ul = $h1->next_sibling();
+
+		$objNextSibling = null;
+		$boolLookingForUl = true;
+		$i = 0;
+		while($boolLookingForUl) {
+			if (is_null($objNextSibling)) {
+				$objNextSibling = $h1->next_sibling();
+			} else {
+				$objNextSibling = $objNextSibling->next_sibling();
+			}
+
+			if ($objNextSibling->tag == 'ul') {
+				$ul = $objNextSibling;
+				$boolLookingForUl = false;
+			}
+		}
 
 		foreach ($ul->find('li') as $li) {
 			$arrDay['meals'][] = $li->plaintext;
